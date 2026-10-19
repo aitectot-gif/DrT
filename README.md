@@ -22,5 +22,6 @@ Then visit `http://localhost:8080`.
 ## Before publishing live
 
 - Confirm the clinic's verified Google Maps listing and replace the current text-search map embed with it.
-- Confirm a WhatsApp-enabled number before adding a WhatsApp enquiry button (currently omitted; Call buttons are used instead).
+- The header/mobile "WhatsApp Us" button links to `wa.me/918300288788` (the clinic's primary number). Confirm this number is actually WhatsApp-enabled before launch, or swap in the correct one.
+- The hero image is still the clinic exterior photo. A transparent multi-generational family PNG was requested but not sourced yet — swap `images/hero-clinic.jpg` and the hero `<img>` in `index.html` once an approved asset is available.
 - Re-verify doctor credentials, services and opening hours against the clinic before publishing, per `SEO_AND_LAUNCH_CHECKLIST.md` in the parent design package.
