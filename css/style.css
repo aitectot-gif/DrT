@@ -675,13 +675,8 @@ input:focus-visible {
 }
 
 .about-media .media-exterior {
-  aspect-ratio: 3 / 4;
-}
-
-@media (min-width: 600px) {
-  .about-media .media-exterior {
-    aspect-ratio: 4 / 3.3;
-  }
+  aspect-ratio: 3 / 2;
+  background: #fff;
 }
 
 @media (min-width: 1024px) {
