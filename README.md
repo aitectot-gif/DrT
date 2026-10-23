@@ -9,21 +9,6 @@ A one-page static website for Dr. Thennarasu Multispeciality Clinic, Uthangarai,
 - `js/script.js` — mobile navigation, header scroll state and the hero image slider
 - `images/` — optimized clinic, doctor, logo and hero slider photos
 
-- `api/reviews.js` — Vercel serverless function that returns the clinic's Google reviews
-
-## Google reviews setup
-
-The "Google Client Reviews" section loads from `/api/reviews`, which calls the official Google Places API (New). Until it is configured, the section shows a "temporarily unavailable" message with a link to the Google Maps listing.
-
-1. In Google Cloud Console, create a project with billing enabled and enable **Places API (New)**.
-2. Create an API key restricted to **Places API (New)** only. Set a daily quota cap and a billing budget alert.
-3. In Vercel → Project → Settings → Environment Variables (Production), add:
-   - `GOOGLE_PLACES_API_KEY` — the key above (server-side only; never put it in the HTML/JS)
-   - `GOOGLE_PLACE_ID` — the clinic's Place ID (recommended; find it with Google's Place ID Finder). If omitted, the function looks the clinic up by name + address and logs the ID it found.
-4. Redeploy, then open `/api/reviews` to confirm it returns `"status":"ok"`.
-
-Google returns at most 5 reviews per place, so the carousel shows up to 5 — not the full review history. Responses are cached at Vercel's edge for 12 hours.
-
 ## Running locally
 
 No build step is required. Either open `index.html` directly in a browser, or serve it locally:
