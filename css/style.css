@@ -675,8 +675,24 @@ input:focus-visible {
 }
 
 .about-media .media-exterior {
-  aspect-ratio: 3 / 2;
-  background: #fff;
+  height: auto;
+  object-fit: contain;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: none;
+  filter: drop-shadow(0 24px 28px rgba(15, 23, 42, 0.18));
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
 }
 
 @media (min-width: 1024px) {
