@@ -940,13 +940,13 @@ input:focus-visible {
   margin: 0;
 }
 
-/* Flex grid: rows share one card width, and short last rows stay centred */
+/* Flex grid: rows share one card width, aligned to the left */
 .service-grid {
   --cols: 1;
   --gap: 16px;
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start;
   gap: var(--gap);
 }
 
