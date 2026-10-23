@@ -118,6 +118,44 @@
     startAutoplay();
   }
 
+  var highlight = document.querySelector(".hero-highlight");
+  if (highlight) {
+    var items = Array.prototype.slice.call(highlight.querySelectorAll(".hero-highlight-item"));
+    var active = 0;
+    var highlightTimer = null;
+    var highlightReduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    function showNextHighlight() {
+      items[active].classList.remove("is-active");
+      active = (active + 1) % items.length;
+      items[active].classList.add("is-active");
+    }
+
+    function startHighlight() {
+      if (highlightReduceMotion || items.length < 2) return;
+      stopHighlight();
+      highlightTimer = window.setInterval(showNextHighlight, 3500);
+    }
+
+    function stopHighlight() {
+      if (highlightTimer) {
+        window.clearInterval(highlightTimer);
+        highlightTimer = null;
+      }
+    }
+
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) {
+        stopHighlight();
+      } else {
+        startHighlight();
+      }
+    });
+    window.addEventListener("pagehide", stopHighlight);
+
+    startHighlight();
+  }
+
   var gallery = document.querySelector(".gallery-carousel");
   if (gallery) {
     var track = gallery.querySelector(".gallery-track");
