@@ -455,7 +455,7 @@ input:focus-visible {
 /* ---------- Hero ---------- */
 .hero {
   background: linear-gradient(180deg, var(--soft-bg) 0%, #ffffff 100%);
-  padding: 48px 0 56px;
+  padding: 48px 0 28px;
 }
 
 .hero-grid {
@@ -650,7 +650,7 @@ input:focus-visible {
 
 @media (min-width: 1024px) {
   .hero {
-    padding: 72px 0 84px;
+    padding: 72px 0 42px;
   }
   .hero-grid {
     grid-template-columns: 1.05fr 0.95fr;
@@ -663,6 +663,11 @@ input:focus-visible {
 }
 
 /* ---------- About ---------- */
+/* Half the usual section gap below the hero */
+#about.section-pad {
+  padding-top: 36px;
+}
+
 .about-intro {
   margin-bottom: 32px;
 }
