@@ -1001,32 +1001,6 @@ input:focus-visible {
   color: var(--body-text);
 }
 
-.service-note {
-  display: flex;
-  gap: 12px;
-  align-items: flex-start;
-  max-width: 900px;
-  margin: -12px auto 44px;
-  padding: 14px 18px;
-  background: var(--soft-bg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-}
-
-.service-note svg {
-  width: 20px;
-  height: 20px;
-  color: var(--accent-dark);
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-
-.service-note p {
-  margin: 0;
-  font-size: 0.9rem;
-  color: var(--body-text);
-}
-
 /* Detailed cards: fewer, wider columns so expanded lists stay readable */
 @media (min-width: 1024px) {
   .service-grid.is-detailed {
