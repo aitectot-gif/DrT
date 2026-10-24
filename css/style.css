@@ -994,13 +994,6 @@ input:focus-visible {
   }
 }
 
-.service-category-head p {
-  max-width: 88ch;
-  margin: 8px 0 0;
-  font-size: 0.96rem;
-  color: var(--body-text);
-}
-
 /* Detailed cards: fewer, wider columns so expanded lists stay readable */
 @media (min-width: 1024px) {
   .service-grid.is-detailed {
