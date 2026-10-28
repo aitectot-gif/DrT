@@ -670,6 +670,7 @@ input:focus-visible {
 
 .about-intro {
   margin-bottom: 32px;
+  text-align: center;
 }
 
 .about-intro h2 {
@@ -678,7 +679,13 @@ input:focus-visible {
 
 .about-intro p {
   max-width: 78ch;
+  margin-left: auto;
+  margin-right: auto;
   font-size: 1.04rem;
+  margin-bottom: 12px;
+}
+
+.about-intro p:last-child {
   margin-bottom: 0;
 }
 
