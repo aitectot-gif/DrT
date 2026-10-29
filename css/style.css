@@ -455,47 +455,22 @@ input:focus-visible {
 /* ---------- Hero ---------- */
 .hero {
   background: linear-gradient(180deg, var(--soft-bg) 0%, #ffffff 100%);
-  padding: 48px 0 28px;
+  padding: 40px 0 28px;
 }
 
-.hero-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 36px;
+/* Centered stack: headline, banner slider, then copy and actions */
+.hero-stack {
+  display: flex;
+  flex-direction: column;
   align-items: center;
+  text-align: center;
 }
 
-.hero-copy h1 {
+.hero-stack h1 {
   font-size: clamp(1.75rem, 4.4vw, 2.9rem);
   line-height: 1.18;
-  margin-bottom: 0.5em;
-}
-
-/* Rotating specialist highlight: items share one grid cell so height never changes */
-.hero-highlight {
-  display: inline-grid;
-  margin: 0 0 18px;
-  padding: 10px 18px;
-  border-left: 4px solid var(--accent);
-  border-radius: var(--radius-sm);
-  background: rgba(242, 133, 0, 0.1);
-  font-family: var(--font-heading);
-  font-weight: 700;
-  font-size: clamp(0.98rem, 1.6vw, 1.12rem);
-  line-height: 1.4;
-  color: var(--primary);
-}
-
-.hero-highlight-item {
-  grid-area: 1 / 1;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
-
-.hero-highlight-item.is-active {
-  opacity: 1;
-  transform: translateY(0);
+  margin-bottom: 28px;
+  text-wrap: balance;
 }
 
 .hero-subhead {
@@ -503,13 +478,23 @@ input:focus-visible {
   font-weight: 600;
   color: var(--accent-dark);
   font-size: 1.08rem;
-  margin-bottom: 14px;
+  margin: 28px 0 10px;
 }
 
-.hero-copy > p.hero-desc {
+.hero-stack > p.hero-desc {
   font-size: 1.04rem;
   color: var(--body-text);
-  max-width: 54ch;
+  max-width: 72ch;
+  margin: 0 auto;
+}
+
+.hero-action-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 26px;
 }
 
 .hero-hours {
@@ -519,9 +504,9 @@ input:focus-visible {
   background: var(--white);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  padding: 10px 16px;
-  margin: 10px 0 24px;
+  padding: 8px 16px;
   box-shadow: var(--shadow-sm);
+  text-align: left;
 }
 
 .hero-hours svg {
@@ -548,71 +533,42 @@ input:focus-visible {
   font-size: 0.98rem;
 }
 
-.hero-cta-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-  margin-bottom: 22px;
-}
-
-.hero-address {
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-  color: var(--muted);
-  font-size: 0.95rem;
-  max-width: 44ch;
-}
-
-.hero-address svg {
-  width: 18px;
-  height: 18px;
-  color: var(--accent-dark);
-  flex-shrink: 0;
-  margin-top: 3px;
-}
-
-.hero-media {
-  position: relative;
-}
-
+/* Full-width banner slider; banners are 1200x400 (3:1) */
 .hero-slider {
   position: relative;
-  height: 320px;
+  width: 100%;
+  aspect-ratio: 3 / 1;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--soft-bg);
+  box-shadow: 0 18px 40px rgba(0, 31, 93, 0.12);
 }
 
 .hero-slide {
   position: absolute;
   inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   opacity: 0;
-  transform: scale(0.97) translateX(4%);
-  transition: opacity 0.9s ease, transform 0.9s ease;
+  transition: opacity 0.9s ease;
   pointer-events: none;
 }
 
 .hero-slide.is-active {
   opacity: 1;
-  transform: scale(1) translateX(0);
   pointer-events: auto;
   z-index: 2;
 }
 
 .hero-slide img {
-  max-width: 100%;
-  max-height: 100%;
-  width: auto;
-  height: auto;
-  object-fit: contain;
-  filter: drop-shadow(0 20px 28px rgba(0, 31, 93, 0.18));
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .hero-slider-dots {
   position: absolute;
   left: 50%;
-  bottom: 2px;
+  bottom: 12px;
   transform: translateX(-50%);
   display: flex;
   align-items: center;
@@ -626,7 +582,7 @@ input:focus-visible {
   border-radius: 999px;
   border: none;
   padding: 0;
-  background: var(--border);
+  background: rgba(0, 31, 93, 0.25);
   cursor: pointer;
   transition: width 0.25s ease, background-color 0.25s ease;
 }
@@ -636,28 +592,38 @@ input:focus-visible {
   background: var(--accent);
 }
 
-@media (min-width: 600px) {
+@media (max-width: 599px) {
   .hero-slider {
-    height: 420px;
+    border-radius: var(--radius-sm);
   }
-}
-
-@media (min-width: 1024px) {
-  .hero-slider {
-    height: 540px;
+  .hero-slider-dots {
+    bottom: 6px;
+  }
+  .hero-dot {
+    width: 7px;
+    height: 7px;
+  }
+  .hero-dot.is-active {
+    width: 18px;
+  }
+  /* Stack the hours card and buttons at one consistent width */
+  .hero-action-row {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    max-width: 320px;
+    gap: 12px;
+  }
+  .hero-action-row > * {
+    justify-content: center;
   }
 }
 
 @media (min-width: 1024px) {
   .hero {
-    padding: 72px 0 42px;
+    padding: 56px 0 42px;
   }
-  .hero-grid {
-    grid-template-columns: 1.05fr 0.95fr;
-    gap: 56px;
-  }
-  /* Sized so each headline line fits the column without breaking */
-  .hero-copy h1 {
+  .hero-stack h1 {
     font-size: min(2.5rem, 3.3vw);
   }
 }
