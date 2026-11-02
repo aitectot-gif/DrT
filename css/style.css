@@ -300,7 +300,7 @@ input:focus-visible {
 .nav-list {
   display: flex;
   align-items: center;
-  gap: 30px;
+  gap: clamp(18px, 2.2vw, 30px);
 }
 
 .nav-list a {
@@ -309,6 +309,7 @@ input:focus-visible {
   font-size: 0.93rem;
   color: var(--primary);
   padding: 8px 2px;
+  white-space: nowrap;
   border-bottom: 2px solid transparent;
   transition: color 0.15s ease, border-color 0.15s ease;
 }
