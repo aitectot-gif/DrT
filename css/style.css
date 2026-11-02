@@ -1454,9 +1454,7 @@ input:focus-visible {
 .gallery-track {
   display: flex;
   gap: var(--gap);
-  transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1);
   will-change: transform;
-  touch-action: pan-y;
 }
 
 .gallery-track.no-transition {
@@ -1688,12 +1686,7 @@ input:focus-visible {
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
-  opacity: 0.35;
-  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, opacity 0.6s ease;
-}
-
-.review-card.is-visible {
-  opacity: 1;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .review-card:hover {
@@ -1775,54 +1768,27 @@ input:focus-visible {
   line-height: 1.65;
 }
 
-.reviews-controls {
-  display: flex;
+.section-head .reviews-note {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 18px;
-  margin-top: 28px;
-}
-
-.reviews-controls .gallery-nav {
-  position: static;
-  transform: none;
-}
-
-.reviews-dots {
-  display: flex;
-  justify-content: center;
   gap: 8px;
-}
-
-.reviews-dot {
-  width: 10px;
-  height: 10px;
-  padding: 0;
-  border: 0;
+  margin-top: 14px;
+  padding: 6px 14px;
+  border: 1px solid var(--border);
   border-radius: 999px;
-  background: var(--border);
-  cursor: pointer;
-  transition: width 0.3s ease, background 0.3s ease;
+  background: var(--white);
+  color: var(--muted);
+  font-size: 0.85rem;
 }
 
-.reviews-dot.is-active {
-  width: 28px;
-  background: var(--accent);
+.reviews-note svg {
+  width: 16px;
+  height: 16px;
 }
 
-.reviews-cta {
-  display: flex;
-  justify-content: center;
-  margin-top: 28px;
-}
-
-.reviews-cta svg {
-  width: 20px;
-  height: 20px;
-}
-
+/* Without motion, let visitors scroll the reviews sideways instead */
 @media (prefers-reduced-motion: reduce) {
-  .reviews-track {
-    transition: none;
+  .reviews-viewport {
+    overflow-x: auto;
   }
 }

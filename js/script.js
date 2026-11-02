@@ -283,117 +283,59 @@
   var reviews = document.querySelector(".reviews-carousel");
   if (reviews) {
     var reviewsTrack = reviews.querySelector(".reviews-track");
-    var reviewsViewport = reviews.querySelector(".reviews-viewport");
-    var cards = Array.prototype.slice.call(reviewsTrack.children);
-    var dotsWrap = reviews.querySelector(".reviews-dots");
-    var page = 0;
-    var pageCount = 1;
-    var reviewsTimer = null;
+    var reviewCards = Array.prototype.slice.call(reviewsTrack.children);
     var reviewsReduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var speed = 35; // pixels per second
+    var offset = 0;
+    var loopWidth = 0;
+    var paused = false;
+    var lastTime = null;
 
-    function perView() {
-      return parseInt(window.getComputedStyle(reviews).getPropertyValue("--per-view"), 10) || 1;
+    if (!reviewsReduceMotion) {
+      // Append a copy of every review so the strip loops from the 8th back to the 1st seamlessly.
+      reviewCards.forEach(function (card) {
+        var clone = card.cloneNode(true);
+        clone.setAttribute("aria-hidden", "true");
+        reviewsTrack.appendChild(clone);
+      });
     }
 
-    function buildDots() {
-      dotsWrap.innerHTML = "";
-      for (var i = 0; i < pageCount; i++) {
-        var dot = document.createElement("button");
-        dot.type = "button";
-        dot.className = "reviews-dot";
-        dot.setAttribute("role", "tab");
-        dot.setAttribute("aria-label", "Show reviews page " + (i + 1));
-        dot.addEventListener("click", (function (target) {
-          return function () {
-            showPage(target);
-            startReviews();
-          };
-        })(i));
-        dotsWrap.appendChild(dot);
-      }
-    }
-
-    function showPage(target) {
-      var n = perView();
-      page = (target + pageCount) % pageCount;
-      // One page is exactly the viewport width plus one gap.
+    function measureLoop() {
       var gap = parseFloat(window.getComputedStyle(reviewsTrack).columnGap) || 0;
-      var width = reviewsTrack.getBoundingClientRect().width;
-      reviewsTrack.style.transform = "translateX(" + -page * (width + gap) + "px)";
+      loopWidth = reviewCards.length * (reviewCards[0].getBoundingClientRect().width + gap);
+    }
 
-      cards.forEach(function (card, i) {
-        var visible = i >= page * n && i < (page + 1) * n;
-        card.classList.toggle("is-visible", visible);
-        card.setAttribute("aria-hidden", visible ? "false" : "true");
+    function tick(time) {
+      if (lastTime !== null && !paused && loopWidth > 0) {
+        offset = (offset + (speed * (time - lastTime)) / 1000) % loopWidth;
+        reviewsTrack.style.transform = "translateX(" + -offset + "px)";
+      }
+      lastTime = time;
+      window.requestAnimationFrame(tick);
+    }
+
+    function pauseReviews() {
+      paused = true;
+    }
+
+    function resumeReviews() {
+      paused = false;
+    }
+
+    if (!reviewsReduceMotion) {
+      reviews.addEventListener("mouseenter", pauseReviews);
+      reviews.addEventListener("mouseleave", resumeReviews);
+      reviews.addEventListener("touchstart", pauseReviews, { passive: true });
+      reviews.addEventListener("touchend", resumeReviews);
+      reviews.addEventListener("touchcancel", resumeReviews);
+
+      window.addEventListener("resize", function () {
+        measureLoop();
+        offset = offset % loopWidth;
       });
-      Array.prototype.forEach.call(dotsWrap.children, function (dot, i) {
-        dot.classList.toggle("is-active", i === page);
-        dot.setAttribute("aria-selected", i === page ? "true" : "false");
-      });
+
+      measureLoop();
+      window.requestAnimationFrame(tick);
     }
-
-    function layoutReviews() {
-      var count = Math.ceil(cards.length / perView());
-      if (count !== pageCount || !dotsWrap.children.length) {
-        pageCount = count;
-        buildDots();
-      }
-      showPage(Math.min(page, pageCount - 1));
-    }
-
-    function startReviews() {
-      if (reviewsReduceMotion) return;
-      stopReviews();
-      reviewsTimer = window.setInterval(function () {
-        showPage(page + 1);
-      }, 5000);
-    }
-
-    function stopReviews() {
-      if (reviewsTimer) {
-        window.clearInterval(reviewsTimer);
-        reviewsTimer = null;
-      }
-    }
-
-    reviews.querySelector(".reviews-prev").addEventListener("click", function () {
-      showPage(page - 1);
-      startReviews();
-    });
-    reviews.querySelector(".reviews-next").addEventListener("click", function () {
-      showPage(page + 1);
-      startReviews();
-    });
-
-    var reviewsTouchX = null;
-    reviewsViewport.addEventListener("touchstart", function (e) {
-      reviewsTouchX = e.touches[0].clientX;
-      stopReviews();
-    }, { passive: true });
-    reviewsViewport.addEventListener("touchend", function (e) {
-      if (reviewsTouchX === null) return;
-      var dx = e.changedTouches[0].clientX - reviewsTouchX;
-      if (Math.abs(dx) > 40) showPage(page + (dx < 0 ? 1 : -1));
-      reviewsTouchX = null;
-      startReviews();
-    });
-
-    reviews.addEventListener("mouseenter", stopReviews);
-    reviews.addEventListener("mouseleave", startReviews);
-    reviews.addEventListener("focusin", stopReviews);
-    reviews.addEventListener("focusout", startReviews);
-
-    document.addEventListener("visibilitychange", function () {
-      if (document.hidden) {
-        stopReviews();
-      } else {
-        startReviews();
-      }
-    });
-
-    window.addEventListener("resize", layoutReviews);
-
-    layoutReviews();
-    startReviews();
   }
 })();
