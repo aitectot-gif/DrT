@@ -1786,9 +1786,18 @@ input:focus-visible {
   height: 16px;
 }
 
-/* Without motion, let visitors scroll the reviews sideways instead */
-@media (prefers-reduced-motion: reduce) {
-  .reviews-viewport {
-    overflow-x: auto;
-  }
+
+.reviews-viewport {
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.reviews-viewport.is-dragging {
+  cursor: grabbing;
+}
+
+.reviews-viewport.is-dragging .review-card {
+  transform: none;
 }

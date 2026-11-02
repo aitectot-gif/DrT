@@ -282,60 +282,85 @@
 
   var reviews = document.querySelector(".reviews-carousel");
   if (reviews) {
+    var reviewsViewport = reviews.querySelector(".reviews-viewport");
     var reviewsTrack = reviews.querySelector(".reviews-track");
     var reviewCards = Array.prototype.slice.call(reviewsTrack.children);
     var reviewsReduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    var speed = 35; // pixels per second
+    var speed = 60; // pixels per second
     var offset = 0;
-    var loopWidth = 0;
-    var paused = false;
+    var hovering = false;
+    var dragging = false;
+    var dragX = 0;
     var lastTime = null;
 
-    if (!reviewsReduceMotion) {
-      // Append a copy of every review so the strip loops from the 8th back to the 1st seamlessly.
-      reviewCards.forEach(function (card) {
-        var clone = card.cloneNode(true);
-        clone.setAttribute("aria-hidden", "true");
-        reviewsTrack.appendChild(clone);
-      });
+    // Append a copy of every review so the strip loops from the 8th back to the 1st seamlessly.
+    reviewCards.forEach(function (card) {
+      var clone = card.cloneNode(true);
+      clone.setAttribute("aria-hidden", "true");
+      reviewsTrack.appendChild(clone);
+    });
+
+    // Distance from the first review to its copy: exactly one full loop, whatever the card size.
+    function loopWidth() {
+      return reviewsTrack.children[reviewCards.length].offsetLeft - reviewCards[0].offsetLeft;
     }
 
-    function measureLoop() {
-      var gap = parseFloat(window.getComputedStyle(reviewsTrack).columnGap) || 0;
-      loopWidth = reviewCards.length * (reviewCards[0].getBoundingClientRect().width + gap);
+    function render() {
+      var width = loopWidth();
+      if (width > 0) {
+        offset = ((offset % width) + width) % width;
+      }
+      reviewsTrack.style.transform = "translate3d(" + -offset + "px, 0, 0)";
     }
 
     function tick(time) {
-      if (lastTime !== null && !paused && loopWidth > 0) {
-        offset = (offset + (speed * (time - lastTime)) / 1000) % loopWidth;
-        reviewsTrack.style.transform = "translateX(" + -offset + "px)";
+      if (lastTime !== null && !hovering && !dragging && !reviewsReduceMotion) {
+        // Cap the step so returning to the tab doesn't make the strip leap.
+        var delta = Math.min(time - lastTime, 50);
+        offset += (speed * delta) / 1000;
+        render();
       }
       lastTime = time;
       window.requestAnimationFrame(tick);
     }
 
-    function pauseReviews() {
-      paused = true;
+    reviews.addEventListener("mouseenter", function () {
+      hovering = true;
+    });
+    reviews.addEventListener("mouseleave", function () {
+      hovering = false;
+    });
+
+    reviewsViewport.addEventListener("pointerdown", function (e) {
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+      dragging = true;
+      dragX = e.clientX;
+      reviewsViewport.classList.add("is-dragging");
+      reviewsViewport.setPointerCapture(e.pointerId);
+    });
+
+    reviewsViewport.addEventListener("pointermove", function (e) {
+      if (!dragging) return;
+      offset -= e.clientX - dragX;
+      dragX = e.clientX;
+      render();
+    });
+
+    function endDrag(e) {
+      if (!dragging) return;
+      dragging = false;
+      reviewsViewport.classList.remove("is-dragging");
+      if (reviewsViewport.hasPointerCapture(e.pointerId)) {
+        reviewsViewport.releasePointerCapture(e.pointerId);
+      }
     }
 
-    function resumeReviews() {
-      paused = false;
-    }
+    reviewsViewport.addEventListener("pointerup", endDrag);
+    reviewsViewport.addEventListener("pointercancel", endDrag);
 
-    if (!reviewsReduceMotion) {
-      reviews.addEventListener("mouseenter", pauseReviews);
-      reviews.addEventListener("mouseleave", resumeReviews);
-      reviews.addEventListener("touchstart", pauseReviews, { passive: true });
-      reviews.addEventListener("touchend", resumeReviews);
-      reviews.addEventListener("touchcancel", resumeReviews);
+    window.addEventListener("resize", render);
 
-      window.addEventListener("resize", function () {
-        measureLoop();
-        offset = offset % loopWidth;
-      });
-
-      measureLoop();
-      window.requestAnimationFrame(tick);
-    }
+    render();
+    window.requestAnimationFrame(tick);
   }
 })();
