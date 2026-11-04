@@ -678,6 +678,54 @@ input:focus-visible {
   margin-bottom: 20px;
 }
 
+.mv-list {
+  display: grid;
+  gap: 18px;
+}
+
+.mv-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: 22px 24px;
+}
+
+.mv-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.mv-head .icon-badge {
+  flex-shrink: 0;
+}
+
+.mv-head h3 {
+  margin: 0;
+  color: var(--primary);
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+}
+
+.mv-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.mv-card .mv-quote {
+  color: var(--accent-dark);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-style: italic;
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
 .value-list {
   display: grid;
   gap: 14px;
