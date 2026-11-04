@@ -785,10 +785,14 @@ input:focus-visible {
   }
 }
 
-@media (min-width: 768px) {
-  .about-grid {
-    grid-template-columns: 1.1fr 0.9fr;
-    gap: 36px;
+/* Tablet: stack the about block — Vision & Mission side by side, photo centred below */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .mv-list {
+    grid-template-columns: 1fr 1fr;
+  }
+  .about-media {
+    max-width: 560px;
+    margin: 0 auto;
   }
 }
 
@@ -1498,13 +1502,25 @@ input:focus-visible {
 
 .footer-bottom {
   border-top: 1px solid rgba(255, 255, 255, 0.14);
-  padding: 18px 0;
+  padding-top: 18px;
+  padding-bottom: 18px;
   font-size: 0.82rem;
+  line-height: 1.6;
   color: rgba(255, 255, 255, 0.6);
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 6px 24px;
   justify-content: space-between;
+}
+
+/* Phones & tablets: stack and centre the copyright line so nothing crowds the edges */
+@media (max-width: 1023px) {
+  .footer-bottom {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-bottom: 24px;
+  }
 }
 
 .footer-credit {
