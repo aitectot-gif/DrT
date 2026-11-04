@@ -652,6 +652,13 @@ input:focus-visible {
   margin-bottom: 12px;
 }
 
+/* Phones: long intro paragraphs read better left-aligned; heading stays centred */
+@media (max-width: 599px) {
+  .about-intro p {
+    text-align: left;
+  }
+}
+
 .about-intro p:last-child {
   margin-bottom: 0;
 }
