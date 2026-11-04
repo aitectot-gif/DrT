@@ -936,6 +936,70 @@ input:focus-visible {
   }
 }
 
+/* ---------- Dental specialists (no photo) ---------- */
+.specialist-block {
+  margin-top: 48px;
+}
+
+.specialist-title {
+  text-align: center;
+  font-size: 1.35rem;
+  margin-bottom: 24px;
+}
+
+.specialist-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.specialist-card {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-top: 4px solid var(--accent);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 22px 24px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.specialist-card .icon-badge {
+  flex-shrink: 0;
+}
+
+.specialist-card h4 {
+  color: var(--primary);
+  font-family: var(--font-heading);
+  font-size: 1.08rem;
+  margin: 0 0 4px;
+}
+
+.specialist-card .doctor-specialty {
+  margin-bottom: 0;
+}
+
+@media (hover: hover) {
+  .specialist-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+@media (min-width: 640px) {
+  .specialist-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 1024px) {
+  .specialist-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 /* ---------- Services ---------- */
 .service-category {
   margin-bottom: 44px;
